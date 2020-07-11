@@ -1,0 +1,206 @@
+<?php 
+$sessionselectionid	= is_array($block->getSessionSelectionId()) ? $block->getSessionSelectionId() : [];
+$block->unsSessionSelectionId();
+
+$baseurl			= $block->getBaseUrl();
+$mediaurl			= $block->getMediaUrl();
+$autolaunchstatus	= $block->getAutoLaunchStatus();
+
+$tickimg 			= $this->getViewFileUrl('Itf_Selection::images/tick.png');
+$questionpath		= $mediaurl.'selection/question/';
+
+if(count($sessionselectionid) > 0){
+	$row = '0';
+	foreach($sessionselectionid as $selectionid){
+		$selectiondata 	= $block->getSelectionData($selectionid)->getData();
+		
+		if($selectiondata){
+			$row 				= '1';
+			$id					= $selectiondata['entity_id'];
+			$title				= $selectiondata['title'];
+			$image				= $selectiondata['image'];
+			$questiondata		= $selectiondata['questiondata'];
+			
+			$questionwrapper 	= '<div class="selection_wrapper"><h2 class="title">'.$title.'</h2>';
+			
+			$explodedatas1 = explode('@_@', $questiondata);
+			foreach($explodedatas1 as $explodedata1){
+				$explodedata	= 	explode('@@@', $explodedata1);
+				$questionid 	= 	($explodedata[0]) ? $explodedata[0] : '';
+				$question 		= 	($explodedata[1]) ? $explodedata[1] : '';
+				$options 		= 	($explodedata[2]) ? $explodedata[2] : '';
+				$choices 		= 	($explodedata[3]) ? json_decode($explodedata[3], true) : [];
+					
+				if($options=='4'){
+					$imageoption = '';
+					foreach($choices as $choice){
+						$imageoption .= '<div class="image_box"><img src='.$questionpath.$choice['value'].' width="150" data-questionid="'.$questionid.'" data-key="'.$choice['key'].'" data-img="'.$tickimg.'"></div>';
+					}
+					$selection = $imageoption;
+				}else{
+					if($options=='1'){
+						$selectoption = '';
+						foreach($choices as $choice){
+							$selectoption .= '<option value="'.$choice['key'].'">'.$choice['value'].'</option>';
+						}
+						$selection = '<div class="select_box"><select name="selection['.$questionid.']"><option value="">Select Option</option>'.$selectoption.'</select></div>';
+					}elseif($options=='2'){
+						$checkboxoption = '';
+						foreach($choices as $choice){
+							$checkboxoption .= '<div class="checkbox_box"><input type="checkbox" name="selection['.$questionid.'][]" value="'.$choice['key'].'">'.$choice['value'].'</div>';
+						}
+						$selection = $checkboxoption;
+					}elseif($options=='3'){
+						$radiooption = '';
+						foreach($choices as $choice){
+							$radiooption .= '<div class="radio_box"><input type="radio" name="selection['.$questionid.']" value="'.$choice['key'].'">'.$choice['value'].'</div>';
+						}
+						$selection = $radiooption;
+					}
+				}
+				
+				$questionwrapper .= '
+					<div class="question_wrapper">				
+						<h3 class="question">'.$question.'</h3>
+						<div class="choices">'.$selection.'</div>
+					</div>
+				';
+			}
+			
+			$questionwrapper .= '</div>';
+		
+			echo '
+				<div class="productselection_wrapper displaynone" id="productselection_wrapper_'.$selectionid.'" data-id="'.$id.'">
+					<form class="form">
+						'.$questionwrapper.'
+					</form>
+				</div>
+			';
+		}
+	}
+}
+?>
+
+<script>
+	require([
+		"jquery",
+		"Magento_Ui/js/modal/modal"
+	], function($, modal){
+		
+		var autolaunchstatus 	= "<?php echo (isset($autolaunchstatus)) ? $autolaunchstatus : '0'; ?>";
+		var rowdata 			= "<?php echo (isset($row) && $row=='1') ? '1' : '0'; ?>";
+		var firstselection		= $('.productselection_wrapper').first().attr('data-id');
+	
+		$(function(){
+			$.ajax({
+				url 		: 	'<?php echo $baseurl; ?>selection/selection/popupdata',
+				type		: 	'POST',
+				dataType 	: 	'json',
+				success		: 	function(data){
+									var result = selectiondata(data, firstselection);
+									if(autolaunchstatus=='1' && rowdata=='1' && result==0) popup(firstselection);
+								}
+			})
+		})
+		
+		$(document).on('click', '.wizard_button', function(){
+			popup($(this).attr('data-selectionid'));
+		})
+				
+		function popup(id){
+			var options = {
+				type		: 	'popup',
+				responsive	: 	true,
+				innerScroll	: 	true,
+				title		: 	"Product Selection", 
+				buttons		: 	[{
+									text	: 	$.mage.__('Submit'),
+									class	: 	'button',
+									click	: 	function(){
+													var ajaxurl = '<?php echo $baseurl; ?>selection/selection/popupsave';
+													var param	= {'id' : id, 'form' : $(document).find('#productselection_wrapper_'+id+' .form').serialize()};
+													
+													$.ajax({
+														showLoader: true,
+														url: ajaxurl,
+														data: param,
+														type: "POST"
+													}).done(function (data){
+														selectiondata(data);
+														$('#productselection_wrapper_'+id).modal("closeModal");  
+														return true;
+													});
+												}
+								}]
+			};
+			
+			var popupdata = $('#productselection_wrapper_'+id);
+			modal(options, popupdata);
+			popupdata.modal('openModal');
+			$('#productselection_wrapper_'+id).show();
+		}
+		
+		function selectiondata(data, id=''){
+			var returnresult = 0;
+			
+			if(data.status && data.result){
+				var result = $.parseJSON(data.result);
+				$.each(result, function(i, v){
+					var selectionid = v.id;
+					
+					if(id!='' && id==selectionid) returnresult = 1;
+						
+					$('.wizard_wrapper_'+selectionid+' .wizard_image').html("<p style='height: 150px;line-height: 150px;font-size: 20px;'>Product will be appear here</p>");  
+														
+					$.each(v.selection, function(i, v){
+						if(v!=''){
+							var wrapper = $(document).find('#productselection_wrapper_'+selectionid);
+							var input1 	= wrapper.find('[name="selection['+i+']"]');
+							
+							if(input1.length){
+								var tagname1 = input1.prop("tagName");
+								
+								if(tagname1=='INPUT'){
+									$(input1).each(function(){
+										if($(this).val()==v) $(this).prop('checked', true);
+									})
+								}else if(tagname1=='SELECT'){
+									input1.val(v);
+								}
+							}else{
+								var input2 		= wrapper.find('[name="selection['+i+'][]"]');
+								if(input2.length){
+										
+									$(input2).each(function(){
+										if(jQuery.inArray($(this).val(), v) !== -1) $(this).prop('checked', true);
+									})
+								}else{
+									wrapper.find('.image_box img[data-questionid="'+i+'"]').each(function(){
+										if(jQuery.inArray($(this).attr('data-key'), v) !== -1) $(this).click();
+									})
+								}
+							}
+						}
+					})
+				})
+			}
+			
+			return returnresult;
+		}
+		
+	});
+	
+	require(['jquery'], function($){
+		$('.image_box img').click(function(){
+			var questionid 	= $(this).attr('data-questionid');
+			var key 		= $(this).attr('data-key');
+			
+			$(this).parent().append('<div><span><img src="<?php echo $tickimg; ?>"><input type="hidden" name="selection['+questionid+'][]" value="'+key+'"></span></div>');
+		})
+		
+		$(document).on('click', '.image_box div', function(){
+			$(this).remove();
+		})
+	});
+</script>
+

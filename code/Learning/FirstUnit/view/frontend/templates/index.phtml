@@ -1,0 +1,58 @@
+<?php
+
+// echo $block->sayHello();
+
+ $emp_data = $block->getEmp();
+//   echo $block->getMediaUrl().'images';
+//  echo $this->mediaDirectory->getAbsolutePath($yourFolderName);
+//echo '<pre>';
+
+    
+//     print_r($value->getName());
+// }
+//echo '</pre>';
+?>
+
+
+<body>
+    <div class="alert alert-info clearfix" style="float: right;">
+        <a href="<?php echo $block->getBaseUrl(); ?>test/front/adduser"> <button type="button"
+                class="btn btn-primary btn-lg pull-right">Add User</button> </a>
+    </div>
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Images</th>
+                    <th>Created At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($emp_data as $value) { ?>
+                <tr>
+                    <td><?php echo $value->getName()?></td>
+                    <td><img style='width:100px'
+                            src="<?php echo $block->getMediaUrl().'images/'.$value->getImage(); ?>" /></td>
+                    <td><?php echo $value->getCreatedAt()?></td>
+                    <td>
+                        <a href="<?php echo $block->getBaseUrl(); ?>test/front/updateuser?id=<?php echo $value->getId() ?>"><button
+                                class='btn btn-success'>Edit</button>
+                        </a>
+                        <a href="<?php echo $block->getBaseUrl(); ?>test/front/delete?id=<?php echo $value->getId() ?>">
+                         <button class='btn btn-success'>Delete</button>
+                        </a>
+                    </td>
+                </tr>
+                <?php } ?>
+            </tbody>
+        </table>
+    </div>
+    <?php
+    $block->sessionData()->setMySession('Mageplaza');
+    echo $block->sessionData()->getMySession();
+    ?>
+</body>
+
+</html>

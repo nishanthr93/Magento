@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<virtualType name="SelectionFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="SelectionDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Itf\Selection\Model\ResourceModel\Selection\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">SelectionFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <type name="Itf\Selection\Model\ResourceModel\Selection\Selection\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">is_selection</argument>
+            <argument name="eventPrefix" xsi:type="string">itf_selection_collection</argument>
+            <argument name="eventObject" xsi:type="string">selection_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Itf\Selection\Model\ResourceModel\Selection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="selection_datasource" xsi:type="string">Itf\Selection\Model\ResourceModel\Selection\Selection\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Learning_FirstUnit::user_manager" title="User Manager" module="Learning_FirstUnit" sortOrder="10" resource="Magento_Backend::content" />
+        <add id="Learning_FirstUnit::add_row" title="Grid Manager" module="Learning_FirstUnit" sortOrder="20" parent="Learning_FirstUnit::user_manager" action="usercontrol/user" resource="Magento_Backend::content"/>
+    </menu>
+</config>
+

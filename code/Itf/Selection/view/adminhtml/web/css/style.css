@@ -1,0 +1,87 @@
+.displaynone{
+	display : none;
+}
+
+.clear{
+	clear : both;
+}
+
+.custom_form{
+	background: #f8f8f8;
+    padding: 50px 0 10px;
+}
+
+.custom_form .choicestablewrapper{
+	width: 80%;
+    box-shadow: 0 0 5px silver;
+    margin: 0 auto;
+}
+
+.custom_form .choicestablewrapper .choicestable{
+	width: 100%;
+	text-align: center;
+}
+
+.custom_form .choicestablewrapper .choicestable tr th,
+.custom_form .choicestablewrapper .choicestable tr td{
+    padding: 10px;
+    border-bottom: 1px solid silver;
+}
+
+.custom_form .choicestablewrapper .choicestable input{
+    width: 100%;
+}
+
+.custom_form .addfield{
+	border: none;
+    padding: 15px 20px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.custom_form_wrapper{
+	display: inline-block;
+    width: 100%;
+}
+
+.custom_form_data{
+	margin-top: 25px;
+    border: 1px solid lightgrey;
+}
+
+.custom_form_data h2{
+	background: #f8f8f8;
+    padding: 15px;
+    margin: 0;
+}
+
+.custom_form_data h2 .editfield{
+	padding-left: 5px;
+	text-decoration: none;
+	color: blue;
+	font-size: 12px;
+}
+
+.custom_form_data h2 .removefield{
+	padding-left: 5px;
+	text-decoration: none;
+	color: red;
+	font-size: 12px;
+}
+
+.custom_form_data h2 span{
+	font-size: 14px;
+}
+
+.custom_form_data .choicesection{
+	padding: 15px;
+}
+
+.custom_form_data .choicesection table tr th,
+.custom_form_data .choicesection table tr td{
+	padding: 20px 60px;
+}
+
+.field-image .delete-image{
+	display : none;
+}

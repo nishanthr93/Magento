@@ -1,0 +1,90 @@
+.displaynone{
+	display : none;
+}
+
+.selection_wrapper{
+	display: inline-block;
+    width: 100%;
+}
+
+.selection_wrapper .title{
+	margin: 0 0 15px;
+}
+
+.question_wrapper{
+	display: inline-block;
+    width: 100%;
+	margin: 0 0 5px;
+}
+
+.question_wrapper .question{
+	margin: 0 0 15px;
+}
+
+.question_wrapper .choices{
+	margin: 0 0 10px;
+}
+
+.question_wrapper .choices .select_box{
+	margin: 0 0 5px;
+}
+
+.question_wrapper .choices .checkbox_box,
+.question_wrapper .choices .radio_box,
+.question_wrapper .choices .image_box
+{
+	display: inline-block;
+    margin: 0 10px 5px 0;
+	position: relative;
+}
+
+.question_wrapper .choices .image_box div
+{
+	position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.question_wrapper .choices .image_box div span
+{
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	-webkit-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+}
+
+.wizard_wrapper{
+	box-shadow: 0 0 1px 1px lightgrey;
+}
+
+.wizard_image{
+	text-align: center;
+}
+
+.wizard_button{
+	text-align: center;
+    font-size: 16px;
+    border-top: 1px solid lightgrey;
+    padding: 10px;
+	cursor: pointer;
+}
+
+.productselection_popup_link{
+	position: fixed;
+    top: 50%;
+    left: 0;
+    background: #6e716e;
+    text-align: center;
+    color: white;
+    line-height: 25px;
+    font-size: 24px;
+    display: inline-block;
+    padding: 5px 12px;
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+	cursor: pointer;
+}

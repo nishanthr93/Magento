@@ -1,0 +1,36 @@
+<form id="send-mail-form-<%- customerid %>" method="post" enctype="multipart/form-data" action="<%- formaction %>">
+    <div class="modal-body">
+        <div class="bootbox-body">
+            <textarea class="bootbox-input bootbox-input-text form-control required-entry" name="send_message" rows="4" cols="83"></textarea>
+            <input type="hidden" name="id" value="<%- customerid %>">
+        </div>
+    </div>
+    <div class="modal-footer">
+        <span class="error"></span>
+        <button type="reset" class="btn btn-default"><span><%- cancellabel %></span></button>
+        <button type="submit" class="btn btn-primary"><span><%- submitlabel %></span></button>
+        <span class="clear"></span>
+    </div>
+</form>
+<div id="myModel">
+        <form action="<?php  echo $block->getBaseUrl().'testmail';?>" method="post" id="form_validate contact-form" data-mage-init='{"validation": {}}'>
+            <label>Name</label>                
+            <input type="text" name="name" id="name" data-validate="{required:true}">
+            <label>Quantity </label>
+            <input type="number" name="quote_qty" id="quote_qty" data-validate='{"required":true}'>    
+            <label>price</label>
+            <input type="text" name="quote_price" id="quote_price"  data-validate="{required:true}">
+            <label>description</label>
+            <input type="text" name="quote_desc" id="quote_desc" data-validate='{"required":true}'>
+            <input type="hiddden" name="product_price" id="product_price" hidden>                 
+            <button type="submit" id="submit" name="submit">submit</button>
+            <button type="reset" name="reset">Reset</button>
+        </form>
+    </div>   
+    <script type="text/x-magento-init">
+        {
+            "#custom-form": {
+                "validation": {}
+            }
+        }
+    </script>

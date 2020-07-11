@@ -1,0 +1,27 @@
+<?php 
+$selectionid 		= $block->getData('id');
+
+if($selectionid!=''){
+	$selectiondata 	= $block->getSelectionData($selectionid)->getData();
+	
+	if($selectiondata){
+		$block->setSessionSelectionId($selectionid);
+		
+		$baseurl				= $block->getBaseUrl();
+		$mediaurl				= $block->getMediaUrl();
+		
+		$image					= $selectiondata['image'];
+		$imagepath				= $mediaurl.'selection/title/'.$image;
+
+		echo '
+			<div class="wizard_wrapper wizard_wrapper_'.$selectionid.'">
+				<div class="wizard_image">
+					'.(($image!='') ? '<img src="'.$imagepath.'">' : 'Image').'
+				</div>
+				<div class="wizard_button" data-selectionid="'.$selectionid.'">Run Wizard</div>
+			</div>
+		';
+	}
+}
+?>
+
